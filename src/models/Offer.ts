@@ -4,18 +4,15 @@ interface IOffer extends Document {
     title: string;
     description: string;
     price: number;
-    path?: string;
-    fileName?: string;
+    imageId?: string;
 }
 
-const imageSchema = new Schema({
+const offerSchema = new Schema({
     title: {type: String, required: true},
     description: {type: String, required: true},
     price: {type: Number, required: true},
-    path: {type: String},
-    fileName: {type: String},
-    // createdAt: {type: Date, default: Date.now}
+    imageId: {type: String, required: false},
 })
 
-const Offer: mongoose.Model<IOffer> = mongoose.model<IOffer>("offers", imageSchema)
+const Offer: mongoose.Model<IOffer> = mongoose.model<IOffer>("offers", offerSchema)
 export {Offer, IOffer}

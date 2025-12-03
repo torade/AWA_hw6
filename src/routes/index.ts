@@ -1,8 +1,8 @@
 import {Request, Response, Router} from "express"
 import { compile } from "morgan"
 import {Offer, IOffer} from "../models/Offer"
+import {Image, IImage} from "../models/Image"
 import upload from "../middleware/multer-config"
-
 
 const router: Router = Router()
 
@@ -48,18 +48,24 @@ router.get("/", (req, res) => {
 
 router.post("/upload", upload.single("image"), async (req: Request, res: Response) => {
     try {
+        let imageId: string | undefined = undefined;
+        if (req.file) {
+            const newImage = new Image({
+                filename: req.file.filename,
+                path: `public/images/${req.file.filename}` 
+            });
+            const savedImage = await newImage.save();
+            imageId = savedImage._id.toString();
+        }
         const offer: IOffer = new Offer({
             description: req.body.description,
             price: req.body.price,
-            title: req.body.title
+            title: req.body.title,
+            imageId: imageId
         })
-        if (req.file) {
-            offer.path = req.file.path.replace("public", "")
-            offer.fileName = req.file.filename
-        }
         await offer.save()
-        console.log("File uploaded and saved in the database")
-        return res.status(201).json({message: "File uploaded and saved in the database"})
+        console.log("Offer saved successfully")
+        return res.status(201).json({message: "Offer saved successfully"})
     } catch(error: any) {
         console.error(`Error while uploading file: ${error}`)
         return res.status(500).json({message: 'Internal server error'})

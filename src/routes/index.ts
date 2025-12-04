@@ -45,7 +45,36 @@ router.get("/", (req, res) => {
 
    
 // })
+router.get("/offers", async(req, res) => {
+    try {
+        let list: any[] = [];
+        const offers: IOffer[] | null = await Offer.find();
+        if(!offers) {
+            return res.status(404).json({message: "No offers found"})
+        }
+        for (let offer of offers) {
+            let imgPath = null;
+            if (offer.imageId) {
+                const img: IImage | null = await Image.findById(offer.imageId);
+                if (img) {
+                    imgPath = img.path.replace("public/",""); //to make path work with static folder
+                }
+            }
+            list.push({
+                title: offer.title,
+                description: offer.description,
+                price: offer.price,
+                imagePath: imgPath
+            })
+        }
 
+        res.status(200).json(list)
+        console.log("Offers fetched successfully from database")
+    } catch (error: any) {
+        console.error(`Error while fetching offers: ${error}`)
+        return res.status(500).json({message: "Internal server error"})
+    }
+})
 router.post("/upload", upload.single("image"), async (req: Request, res: Response) => {
     try {
         let imageId: string | undefined = undefined;

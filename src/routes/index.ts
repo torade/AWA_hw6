@@ -11,40 +11,6 @@ router.get("/", (req, res) => {
     
 })
 
-// router.get("/api/images",async (req: Request, res: Response) => {
-//     try {
-//         const images: IImage[] | null = await Image.find()
-
-//         if(!images) {
-//             return res.status(404).json({message: 'No images found'})
-//         }
-
-//         res.status(200).json(images)
-//         console.log('Images fetched successfully from database')
-//     } catch (error: any) {
-//         console.error(`Error while fetching a file: ${error}`)
-//         return res.status(500).json({message: 'Internal server error'})
-//     }
-
-// })
-
-// router.get("/api/images/:id", async (req: Request, res: Response) => {
-//     try {
-//         const image: IImage | null = await Image.findById(req.params.id)
-        
-//         if(!image) {
-//             return res.status(404).json({message: 'Image not found'})
-//         }
-//         res.status(200).json(image)
-//         console.log('Image fetched successfully from database')
-
-//     } catch (error: any) {
-//         console.error(`Error while fetching a file: ${error}`)
-//         return res.status(500).json({message: 'Internal server error'})
-//     }
-
-   
-// })
 router.get("/offers", async(req, res) => {
     try {
         let list: any[] = [];
@@ -102,30 +68,5 @@ router.post("/upload", upload.single("image"), async (req: Request, res: Respons
  
     
 })
-
-// router.patch("/api/images/:id", async (req: Request, res: Response) => {
-//     try {
-//         const image: IImage | null = await Image.findById(req.params.id)
-        
-//         if(!image) {
-//             return res.status(404).json({message: 'Image not found'})
-//         }
-
-//         image.description = req.body.description
-//         await image.save()
-
-//         res.status(200).json({message: "Image updated"})
-//         console.log('Image updated')
-
-//     } catch (error: any) {
-//         console.error(`Error while updating a file: ${error}`)
-//         return res.status(500).json({message: 'Internal server error'})
-//     }
-
-   
-// })
-
-
-
 
 export default router

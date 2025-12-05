@@ -36,84 +36,61 @@ const displayOffers = (offersData) => {
     let container = document.getElementById("offersContainer");
     container.innerHTML = "";
     for (let i = 0; i < offersData.length; i++) {
+        // Main column div
         let childdiv = document.createElement("div");
-        childdiv.className = "offerDiv";
-        // create image
+        childdiv.className = "offerDiv col s12 m6 l4";
+
+        // Card div
+        let cardDiv = document.createElement("div");
+        cardDiv.className = "card hoverable";
+
+        // Card image section
         if (offersData[i].imagePath) {
+            let cardImageDiv = document.createElement("div");
+            cardImageDiv.className = "card-image";
             let img = document.createElement("img");
             img.src = `http://localhost:3000/${offersData[i].imagePath}`;
-            childdiv.appendChild(img);
+            img.className = "responsive-img";
+            cardImageDiv.appendChild(img);
+
+            // Title as span inside card-image
+            let titleSpan = document.createElement("span");
+            titleSpan.className = "card-title";
+            titleSpan.innerText = offersData[i].title;
+            cardImageDiv.appendChild(titleSpan);
+
+            cardDiv.appendChild(cardImageDiv);
+        } else {
+            // If no image, still show title in card-content
+            let cardContentDiv = document.createElement("div");
+            cardContentDiv.className = "card-content";
+            let titleSpan = document.createElement("span");
+            titleSpan.className = "card-title";
+            titleSpan.innerText = offersData[i].title;
+            cardContentDiv.appendChild(titleSpan);
+            cardDiv.appendChild(cardContentDiv);
         }
-        //title
-        let title = document.createElement("p");
-        title.innerText = offersData[i].title;
-        childdiv.appendChild(title);
-        //description
+
+        // Card content section (description and price)
+        let cardContentDiv = document.createElement("div");
+        cardContentDiv.className = "card-content";
+
         let description = document.createElement("p");
         description.innerText = offersData[i].description;
-        childdiv.appendChild(description);
-        //price
+        cardContentDiv.appendChild(description);
+
         let price = document.createElement("p");
         price.innerText = `$${offersData[i].price}`;
-        childdiv.appendChild(price);
-        //append to main div
+        cardContentDiv.appendChild(price);
+
+        cardDiv.appendChild(cardContentDiv);
+
+        // Append card to column
+        childdiv.appendChild(cardDiv);
+
+        // Append column to container
         container.appendChild(childdiv);
     }
-    
 }
 
-// document.getElementById("uploadForm").addEventListener("submit", async function(event) {
-//     event.preventDefault()
-//     const formData = new FormData(this)
-//     formData.append("description", document.getElementById("desc").value)
-
-//     try {
-//         const response = await fetch("/api/upload", {
-//             method: "POST",
-//             body: formData
-//         })
-//         if (!response.ok) {
-//             throw new Error("Upload failed")
-//         }
-//         const responseData = await response.json()
-//     } catch(error) {
-//         console.log("Error: ", error)
-//     } finally {
-//         fetchImageData()
-//     }
-// })
-
-// const fetchImageData = async() => {
-//     try {
-//         const response = await fetch("/api/images")
-//         if(!response.ok) {
-//             throw new Error("Failed to fetch images")
-//         }
-//         const imageData = await response.json()
-//         displayImages(imageData)
-
-//     } catch(error) {
-//         console.error("Error", error)
-//     }
-// }
-
-// const displayImages = (imageData) => {
-//     const imageGrid = document.getElementById("imageGrid")
-//     for(let i=0; i < imageData.length; i++) {
-//         const imageItem = document.createElement("div")
-//         imageItem.classList.add("imageItem")
-
-//         const img = document.createElement("img")
-//         img.src = `http://localhost:8000/${imageData[i].path}`
-
-//         const description = document.createElement("p")
-//         description.textContent = imageData[i].description
-
-//         imageItem.appendChild(img)
-//         imageItem.appendChild(description)
-//         imageGrid.appendChild(imageItem)
-//     }
-// }
-
-// fetchImageData()
 fetchOfferData()
